@@ -28,6 +28,7 @@ export default function Home() {
       </Head>
 
       <main style={{ height: "100vh" }}>
+        {/* @ts-ignore */}
         <VideoRecorder
           timeLimit={5000}
           mimeType="video/mp4"
