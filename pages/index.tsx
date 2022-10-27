@@ -33,8 +33,16 @@ export default function Home() {
           timeLimit={5000}
           mimeType="video/mp4"
           showReplayControls
-          onRecordingComplete={(videoBlob: any) => {
+          onRecordingComplete={async (videoBlob: Blob) => {
             // Do something with the video...
+            const response = await fetch("/api/s3token");
+            const { url, key }: { url: string; key: string } =
+              await response.json();
+            console.log(url);
+            fetch(url, {
+              method: "PUT",
+              body: videoBlob,
+            });
             console.log("videoBlob", videoBlob);
             // saveFile(videoBlob, "download.mp4");
           }}
