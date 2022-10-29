@@ -1,21 +1,10 @@
 import React from "react";
 import Head from "next/head";
 import VideoRecorder from "react-video-recorder";
+import { useRouter } from "next/router";
 
 export default function Home() {
-  function saveFile(blob: Blob, filename: string) {
-    const a = document.createElement("a");
-    document.body.appendChild(a);
-    const url = window.URL.createObjectURL(blob);
-    a.href = url;
-    a.download = filename;
-    a.click();
-    setTimeout(() => {
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    }, 0);
-  }
-
+  const router = useRouter();
   return (
     <>
       <Head>
@@ -31,6 +20,7 @@ export default function Home() {
         {/* @ts-ignore */}
         <VideoRecorder
           timeLimit={5000}
+          isOnInitially
           mimeType="video/mp4"
           showReplayControls
           onRecordingComplete={async (videoBlob: Blob) => {
@@ -39,11 +29,16 @@ export default function Home() {
             const { url, key }: { url: string; key: string } =
               await response.json();
             console.log(url);
-            fetch(url, {
+            await fetch(url, {
               method: "PUT",
               body: videoBlob,
             });
-            console.log("videoBlob", videoBlob);
+            router.push({
+              pathname: "/results",
+              query: {
+                filename: key,
+              },
+            });
             // saveFile(videoBlob, "download.mp4");
           }}
         />
