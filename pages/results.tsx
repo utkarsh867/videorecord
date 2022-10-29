@@ -34,7 +34,11 @@ export default function Results() {
         alignItems: "center",
       }}
     >
-      {loading ? <p>Loading...</p> : <p>Prediction: {result}% fake</p>}
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <p>Prediction: {(result * 100).toFixed(2)}% fake</p>
+      )}
     </div>
   );
 }
